@@ -31,7 +31,7 @@ def log(txt, out):
 samples = []
 for l in open(args.samples):
     if len(l) > 1:
-        samples.append(l.split('/')[-1].replace('.bam_min2var_FIXED.bam', '').strip())
+        samples.append(l.split('/')[-1].replace('.bam', '').strip())
 print samples
 
 chromosomes = ['01']
