@@ -4,6 +4,7 @@
 
 #-s test_samples.txt
 #-b /mnt/lfs2/hend6746/devils/reference/sarHar1.fa
+#-i  /mnt/home/hend6746/scratch/wolves/bed_files/baits_canfam3.1_sorted_merged.bed
 
 from os.path import join as jp
 from os.path import abspath
@@ -14,6 +15,7 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('-s', "--samples", help=" samples.txt file with sample ID.", required=True)
 parser.add_argument('-b', "--bwaindex", help="Path to bwa index file.", required=True)
+parser.add_argument('-i', "--intervals", help="file to chromosome intervals", required=True)
 args = parser.parse_args()
 
 VERBOSE=False
@@ -38,6 +40,7 @@ variantFolder = abspath('03-Calls')
 PBS_scripts = abspath('GATK_PBS_scripts')
 bwaIndex = abspath(args.bwaindex)
 gatkCall = 'java -jar /opt/modules/biology/gatk/3.5/bin/GenomeAnalysisTK.jar -R %s' % bwaIndex
+intervalPath = abspath(args.intervals)
 
 os.system('mkdir -p %s' % bamFolder)
 os.system('mkdir -p %s' % variantFolder)
@@ -70,6 +73,7 @@ for sample in samples:
     #not recommended for somatic (cancer) variant discovery. For that purpose, use MuTect2 instead
     cmd = ' '.join([gatkCall, ' -T HaplotypeCaller ', ' -I ' + jp(bamFolder, sample) + '.bam',
     ' --emitRefConfidence GVCF', ' -o ' + jp(variantFolder, sample) + '.raw.snps.indels.g.vcf',
+    ' --intervals ' intervalPath, ' --interval_padding 1000', ' --interval_set_rule INTERSECTION'
     '>>', logFile, '2>&1'])
     log(cmd, logCommands)
 
