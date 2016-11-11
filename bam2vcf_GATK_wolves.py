@@ -35,7 +35,7 @@ print samples
 # Setup folders and paths variables:
 bamFolder = abspath('02-Mapped')
 variantFolder = abspath('03-Calls')
-PBS_scripts = abspath('_GATK_PBS_scripts')
+PBS_scripts = abspath('GATK_PBS_scripts')
 bwaIndex = abspath(args.bwaindex)
 gatkCall = 'java -jar /opt/modules/biology/gatk/3.5/bin/GenomeAnalysisTK.jar -R %s' % bwaIndex
 
@@ -48,8 +48,8 @@ os.system('mkdir -p %s' % PBS_scripts)
 for sample in samples:
     print "Processing", sample, "....."
     # Set up files:
-    logFile =''.join([jp(PBS_scripts, sample), 'GATK.log'])
-    logCommands = open(''.join([jp(PBS_scripts, sample), 'GATK_commands.sh']), 'w')
+    logFile =''.join([jp(PBS_scripts, sample), '_GATK.log'])
+    logCommands = open(''.join([jp(PBS_scripts, sample), '_GATK_commands.sh']), 'w')
 
     #Setup for qsub
     log('#!/bin/bash', logCommands)
