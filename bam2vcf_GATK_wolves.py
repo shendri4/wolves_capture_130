@@ -35,7 +35,7 @@ print samples
 # Setup folders and paths variables:
 bamFolder = abspath('02-Mapped')
 variantFolder = abspath('03-Calls')
-PBS_scripts = abspath('GATK_PBS_scripts')
+PBS_scripts = abspath('_GATK_PBS_scripts')
 bwaIndex = abspath(args.bwaindex)
 gatkCall = 'java -jar /opt/modules/biology/gatk/3.5/bin/GenomeAnalysisTK.jar -R %s' % bwaIndex
 
