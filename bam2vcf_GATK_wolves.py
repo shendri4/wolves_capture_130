@@ -31,15 +31,15 @@ def log(txt, out):
 samples = []
 for l in open(args.samples):
     if len(l) > 1:
-        samples.append(l.split('/')[-1].replace('.bam', '').strip())
+        samples.append(l.split('/')[-1].replace('.bam_min2var_FIXED.bam', '').strip())
 print samples
 
-chromosomes = ['1']
+chromosomes = ['01']
 
 # Setup folders and paths variables:
 bamFolder = abspath('02-Mapped')
 variantFolder = abspath('03-Calls')
-PBS_scripts = abspath('GATKPBS_scripts')
+PBS_scripts = abspath('GATK_PBS_scripts')
 bwaIndex = abspath(args.bwaindex)
 #intervalPath = abspath(args.intervals)
 gatkCall = 'java -jar /opt/modules/biology/gatk/3.5/bin/GenomeAnalysisTK.jar -R %s' % bwaIndex
