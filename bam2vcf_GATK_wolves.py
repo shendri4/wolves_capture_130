@@ -15,7 +15,7 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('-s', "--samples", help=" samples.txt file with sample ID.", required=True)
 parser.add_argument('-b', "--bwaindex", help="Path to bwa index file.", required=True)
-parser.add_argument('-i', "--intervals", help="Path to chromosome intervals", required=True)
+#parser.add_argument('-i', "--intervals", help="Path to chromosome intervals", required=True)
 args = parser.parse_args()
 
 VERBOSE=False
@@ -39,15 +39,15 @@ chromosomes = ['1']
 # Setup folders and paths variables:
 bamFolder = abspath('02-Mapped')
 variantFolder = abspath('03-Calls')
-PBS_scripts = abspath('GATK_PBS_scripts')
+PBS_scripts = abspath('GATKPBS_scripts')
 bwaIndex = abspath(args.bwaindex)
-intervalPath = abspath(args.intervals)
+#intervalPath = abspath(args.intervals)
 gatkCall = 'java -jar /opt/modules/biology/gatk/3.5/bin/GenomeAnalysisTK.jar -R %s' % bwaIndex
 
 os.system('mkdir -p %s' % bamFolder)
 os.system('mkdir -p %s' % variantFolder)
 os.system('mkdir -p %s' % PBS_scripts)
-os.system('mkdir -p %s' % _PBS_scripts)
+os.system('mkdir -p %s' % PBS_scripts)
 
 ##### Run pipeline ###
     
@@ -55,8 +55,8 @@ for sample in samples:
     print "Processing", sample, "....."
     for chromosome in chromosomes:
     # Set up files:
-        logFile =''.join([jp(PBS_scripts, sample), '_chr' + str(chromosome), '__mutect.log'])
-        logCommands = open(''.join([jp(_PBS_scripts, sample), '_chr' + str(chromosome), '__mutect_commands.sh']), 'w')
+        logFile =''.join([jp(PBS_scripts, sample), '_chr' + str(chromosome), '_mutect.log'])
+        logCommands = open(''.join([jp(PBS_scripts, sample), '_chr' + str(chromosome), '_mutect_commands.sh']), 'w')
 
         #Setup for qsub
         log('#!/bin/bash', logCommands)
