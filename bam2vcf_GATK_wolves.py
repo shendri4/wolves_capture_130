@@ -4,7 +4,7 @@
 
 #-s test_samples.txt
 #-b /mnt/lfs2/hend6746/devils/reference/sarHar1.fa
-#-i  /mnt/home/hend6746/scratch/wolves/bed_files/baits_canfam3.1_sorted_merged.bed
+#-i  /mnt/lfs2/hend6746/wolves/bed_files/baits_canfam3.1_sorted_merged.bed
 
 from os.path import join as jp
 from os.path import abspath
@@ -71,6 +71,10 @@ for sample in samples:
     #HaplotypeCaller on each sample BAM file 
     #(if a sample's data is spread over more than one BAM, then pass them all in together) to create single-sample gVCFs
     #not recommended for somatic (cancer) variant discovery. For that purpose, use MuTect2 instead
+    #     Index:
+    cmd = ' '.join(['samtools index', jp(bamFolder, sample) + '.bam'])
+    log(cmd, logCommands)
+    
     cmd = ' '.join([gatkCall, ' -T HaplotypeCaller ', ' -I ' + jp(bamFolder, sample) + '.bam',
     ' --emitRefConfidence GVCF', ' -o ' + jp(variantFolder, sample) + '.raw.snps.indels.g.vcf',
     ' --intervals ' + intervalPath, ' --interval_padding 1000', ' --interval_set_rule INTERSECTION',
