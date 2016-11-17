@@ -67,8 +67,8 @@ for variant in variants:
 	## Evaluate all raw variants in file to see quality of variants before filters are applied (OPTIONAL)
 	################################## 
 	cmd = ' '.join([gatkCall, ' -T VariantEval ', 
-	' -o ' + jp(variantFolder, variant + '.raw.eval.gatkreport.grp'), 
-	' --eval: ' + jp(variantFolder, variant + '.vcf'), 
+	' -o ' + jp(jointFolder, variant + '.raw.eval.gatkreport.grp'), 
+	' --eval: ' + jp(jointFolder, variant + '.vcf'), 
 	' --doNotUseAllStandardStratifications ', ' --doNotUseAllStandardModules ', ' --evalModule CountVariants ',
 	'>>', logFile, '2>&1'])
 	log(cmd, logCommands)
