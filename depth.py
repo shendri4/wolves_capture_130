@@ -64,6 +64,6 @@ for sample in samples:
 
 ###########################################################################
 #### Number of raw reads
-    cmd = ' '.join(["samtools depth -a ", jp(bamFolder, sample + '.bam'), "-b ", abspath(args.beddata), " | awk '{ sum += $3 } END { if (NR > 0) print sum / NR }'"])
+    cmd = ' '.join(["samtools depth -a ", jp(bamFolder, sample + '.bam'), "-b ", abspath(args.beddata), " | awk '{ sum += $3 } END { if (NR > 0) print sum / NR }'", '>>', logFile, '2>&1'])
     log(cmd, logCommands)
     logCommands.close()
