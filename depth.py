@@ -47,7 +47,7 @@ os.system('mkdir -p %s' % PBS_scripts)
 for sample in samples:
     print "Processing", sample, "....."
     # Set up files:
-    logFile = jp(resultsDir, sample + '_depth.log')
+    logFile = jp(depthFolder, sample + '_depth.log')
     logCommands = open(jp(PBS_scripts, sample + 'depth_commands.sh'), 'w')
 
     #Setup for qsub
