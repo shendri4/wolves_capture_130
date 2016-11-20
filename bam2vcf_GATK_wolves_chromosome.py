@@ -3,8 +3,8 @@
 #from glob import glob
 
 #-s test_samples.txt
-#-b /mnt/lfs2/hend6746/devils/reference/sarHar1.fa
-#-i /mnt/lfs2/hend6746/devils/reference/
+#-b /mnt/lfs2/hend6746/wolves/reference/canfam31/canfam31.fa
+#-i /mnt/lfs2/hend6746/
 
 from os.path import join as jp
 from os.path import abspath

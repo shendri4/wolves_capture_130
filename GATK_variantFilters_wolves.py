@@ -106,7 +106,7 @@ for variant in variants:
 	cmd = ' '.join([gatkCall, ' -T VariantFiltration ', 
 	' -V ' + jp(filteredFolder, variant + '_GQ20_filtered_SNPs.vcf'), 
 	' -o ' + jp(filteredFolder, variant + '_minDP10_GQ20_filtered_SNPs.vcf'), 
-	' --filterExpression "DP > 10.0" ', 
+	' --filterExpression "DP < 10.0" ', 
 	' --filterName "BadSNP" ',
 	'>>', logFile, '2>&1'])
 	log(cmd, logCommands)
@@ -119,7 +119,7 @@ for variant in variants:
 	cmd = ' '.join([gatkCall, ' -T SelectVariants ', 
 	' -o ' + jp(filteredFolder, variant + '_selected_minDP10_GQ20_filtered_SNPs.vcf'), 
 	'  -V ' + jp(filteredFolder, variant + '_minDP10_GQ20_filtered_SNPs.vcf'), 
-	' --env', ' --ev',
+	' --env', ' --ef',
 	'>>', logFile, '2>&1'])
 	log(cmd, logCommands)
 

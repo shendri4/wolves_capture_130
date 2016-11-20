@@ -4,7 +4,7 @@
 
 #Usage: python ../fox_wgs/jointgenotyping_GATK.py 
 #-s ./samples.txt 
-#-b /mnt/lfs2/hend6746/devils/reference/sarHar1.fa
+#b /mnt/lfs2/hend6746/wolves/reference/canfam31/canfam31.fa
 
 from os.path import join as jp
 from os.path import abspath
@@ -43,6 +43,7 @@ gatkCall = 'java -jar /opt/modules/biology/gatk/3.5/bin/GenomeAnalysisTK.jar -R 
 
 os.system('mkdir -p %s' % bamFolder)
 os.system('mkdir -p %s' % variantFolder)
+os.system('mkdir -p %s' % mergedFolder)
 os.system('mkdir -p %s' % PBS_scripts)
 os.system('mkdir -p %s' % jointFolder)
 
@@ -64,7 +65,7 @@ log("module load grc", logCommands)
 
 variants = []
 for sample in open(args.samples):
-    sample = ' '.join(['--variant ' + sample])
+    sample = ' '.join(['--variant' + sample])
     variants.append(sample)
 variantList = ' '.join(str(x) for x in variants)
 print variantList
