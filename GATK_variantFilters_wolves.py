@@ -14,6 +14,7 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('-s', "--variants", help="List of joint (raw) variant (.vcf) files", required=True)
 parser.add_argument('-b', "--bwaindex", help="Path to bwa index file.", required=True)
+parser.add_argument('-l', "--lowcovlist", help="Path to txt file of low coverage individuals to remove.", required=True)
 args = parser.parse_args()
 
 VERBOSE=False
@@ -37,6 +38,7 @@ jointFolder = abspath('joint_vcf')
 filteredFolder = abspath('joint_vcf/filtered')
 PBS_scripts = abspath('filter_GATK_PBS_scripts')
 bwaIndex = abspath(args.bwaindex)
+lowCovList = abspath(args.lowcovlist)
 gatkCall = 'java -jar /opt/modules/biology/gatk/3.5/bin/GenomeAnalysisTK.jar -R %s' % bwaIndex
 
 os.system('mkdir -p %s' % jointFolder)
@@ -74,10 +76,19 @@ for variant in variants:
 	log(cmd, logCommands)
 
 	###########################################################################
+	#### Exclude low cov samples
+	cmd = ' '.join([gatkCall, ' -T SelectVariants ', 
+	' -o ' + jp(jointFolder, variant + '_noLowCovInd.vcf'), 
+	' -V ' + jp(jointFolder, variant + '.vcf'), 
+	' --exclude_sample_file ' + lowCovList,
+	'>>', logFile, '2>&1'])
+	log(cmd, logCommands)
+	
+	###########################################################################
 	#### Extract the SNPs from the call set
 	cmd = ' '.join([gatkCall, ' -T SelectVariants ', 
-	' -o ' + jp(jointFolder, variant + '_raw_SNPs.vcf'), 
-	' -V ' + jp(jointFolder, variant + '.vcf'), 
+	' -o ' + jp(jointFolder, variant + '_raw_SNPs_noLowCovInd.vcf'), 
+	' -V ' + jp(jointFolder, variant + '_noLowCovInd.vcf'), 
 	' -selectType SNP ',
 	'>>', logFile, '2>&1'])
 	log(cmd, logCommands)
@@ -86,8 +97,8 @@ for variant in variants:
 	#### High quality filters
 	#### Filter variant sites from raw variants
 	cmd = ' '.join([gatkCall, ' -T VariantFiltration ', 
-	' -V ' + jp(jointFolder, variant + '_raw_SNPs.vcf'), 
-	' -o ' + jp(filteredFolder, variant + '_filtered_SNPs.vcf'), 
+	' -V ' + jp(jointFolder, variant + '_raw_SNPs_noLowCovInd.vcf'), 
+	' -o ' + jp(filteredFolder, variant + '_filtered_SNPs_noLowCovInd.vcf'), 
 	' --filterExpression "QD < 2.0 || FS > 60.0 || MQ < 40.0 || MQRankSum < -12.5 || ReadPosRankSum < -8.0" ', 
 	' --filterName "BadSNP" ',
 	'>>', logFile, '2>&1'])
@@ -95,8 +106,8 @@ for variant in variants:
 
 	#### GQ20
 	cmd = ' '.join([gatkCall, ' -T VariantFiltration ', 
-	' -o ' + jp(filteredFolder, variant + '_GQ20_filtered_SNPs.vcf'), 
-	' -V ' + jp(filteredFolder, variant + '_filtered_SNPs.vcf'), 
+	' -o ' + jp(filteredFolder, variant + '_GQ20_filtered_SNPs_noLowCovInd.vcf'), 
+	' -V ' + jp(filteredFolder, variant + '_filtered_SNPs_noLowCovInd.vcf'), 
 	' -G_filter "GQ < 20.0" ',
 	' -G_filterName "lowGQ" ',
 	'>>', logFile, '2>&1'])
@@ -104,8 +115,8 @@ for variant in variants:
 
 	#### Filter variant sites from raw variants
 	cmd = ' '.join([gatkCall, ' -T VariantFiltration ', 
-	' -V ' + jp(filteredFolder, variant + '_GQ20_filtered_SNPs.vcf'), 
-	' -o ' + jp(filteredFolder, variant + '_minDP10_GQ20_filtered_SNPs.vcf'), 
+	' -V ' + jp(filteredFolder, variant + '_GQ20_filtered_SNPs_noLowCovInd.vcf'), 
+	' -o ' + jp(filteredFolder, variant + '_minDP10_GQ20_filtered_SNPs_noLowCovInd.vcf'), 
 	' --filterExpression "DP < 10.0" ', 
 	' --filterName "BadSNP" ',
 	'>>', logFile, '2>&1'])
@@ -117,8 +128,8 @@ for variant in variants:
 	###########################################################################
 	#### Exclude non-variant loci and filtered loci (trim remaining alleles by default):
 	cmd = ' '.join([gatkCall, ' -T SelectVariants ', 
-	' -o ' + jp(filteredFolder, variant + '_selected_minDP10_GQ20_filtered_SNPs.vcf'), 
-	'  -V ' + jp(filteredFolder, variant + '_minDP10_GQ20_filtered_SNPs.vcf'), 
+	' -o ' + jp(filteredFolder, variant + '_selected_minDP10_GQ20_filtered_SNPs_noLowCovInd.vcf'), 
+	'  -V ' + jp(filteredFolder, variant + '_minDP10_GQ20_filtered_SNPs_noLowCovInd.vcf'), 
 	' --env', ' --ef',
 	'>>', logFile, '2>&1'])
 	log(cmd, logCommands)
@@ -128,8 +139,8 @@ for variant in variants:
 	## Evaluate all variants in file 
 	################################## 
 	cmd = ' '.join([gatkCall, ' -T VariantEval ', 
-	' -o ' + jp(filteredFolder, variant + '_selected_GQ20_filtered_SNPs.eval.gatkreport.grp'), 
-	' --eval: ' + jp(filteredFolder, variant + '_selected_minDP10_GQ20_filtered_SNPs.vcf'), 
+	' -o ' + jp(filteredFolder, variant + '_selected_GQ20_filtered_SNPs_noLowCovInd.eval.gatkreport.grp'), 
+	' --eval: ' + jp(filteredFolder, variant + '_selected_minDP10_GQ20_filtered_SNPs_noLowCovInd.vcf'), 
 	' --doNotUseAllStandardStratifications', ' --doNotUseAllStandardModules',
 	' --evalModule CountVariants ',
 	' --evalModule TiTvVariantEvaluator ',
