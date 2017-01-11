@@ -130,7 +130,7 @@ for variant in variants:
 	cmd = ' '.join([gatkCall, ' -T SelectVariants ', 
 	' -o ' + jp(filteredFolder, variant + '_selected_minDP10_GQ20_filtered_SNPs_noLowCovInd.vcf'), 
 	'  -V ' + jp(filteredFolder, variant + '_minDP10_GQ20_filtered_SNPs_noLowCovInd.vcf'), 
-	' --env', ' --ef',
+	' --excludeNonVariants', ' --excludeFiltered',
 	'>>', logFile, '2>&1'])
 	log(cmd, logCommands)
 
