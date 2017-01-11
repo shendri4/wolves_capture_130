@@ -4,7 +4,7 @@
 
 #Usage: python ../fox_wgs/jointgenotyping_GATK.py 
 #-s ./samples.txt 
-#b /mnt/lfs2/hend6746/wolves/reference/canfam31/canfam31.fa
+#-b /mnt/lfs2/hend6746/wolves/reference/canfam31/canfam31.fa
 
 from os.path import join as jp
 from os.path import abspath
