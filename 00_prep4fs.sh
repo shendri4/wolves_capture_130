@@ -2,7 +2,7 @@
 ### The goal of this script is to generate phased data and recombination rate file for finestructure from vcf file
 ### Written by SAH
 ### Last modified: 01/16/17
-### Usage: ./00_prep4fs.sh [RUN_DATE] [FILE_NAME]
+### Usage: ./00_prep4fs.sh [RUN_DATE] [DATA_DIR] [FILE_NAME]
 
 module load finestructure
 module load chromopainter
@@ -12,13 +12,14 @@ module load java/1.8.0
 
 ### user-defined variables ###
 RUN_DATE=$1
-FILE_NAME=$2
+DATA_DIR=$2
+FILE_NAME=$3
 
 ### Directories
 beagle_dir="/mnt/lfs2/hend6746/modules/beagle/4.1/"
 chromo_dir="/mnt/lfs2/hend6746/modules/chromopainter/"
 proj_dir="/mnt/lfs2/hend6746/wolves_87+rena"
-in_dir=${proj_dir}/coastal_genotypes_FINAL/data_files/126indiv_allSites/
+in_dir=${proj_dir}/coastal_genotypes_FINAL/data_files/${DATA_DIR}/
 results_dir=${proj_dir}/fineStructure/${RUN_DATE}/phased_beagle/
 fs_in_dir=${proj_dir}/fineStructure/${RUN_DATE}/fs_input/
 
