@@ -1,5 +1,5 @@
 #!/bin/bash
-### The goal of this script is to generate phased data and recombination rate file for finestructure
+### The goal of this script is to generate phased data and recombination rate file for finestructure from vcf file
 ### Written by SAH
 ### Last modified: 01/16/17
 ### Usage: ./00_prep4fs.sh [RUN_DATE] [FILE_NAME]
@@ -8,6 +8,7 @@ module load finestructure
 module load chromopainter
 module load vcftools
 module load plink
+module load java/1.8.0
 
 ### user-defined variables ###
 RUN_DATE=$1
@@ -23,7 +24,6 @@ fs_in_dir=${proj_dir}/fineStructure/${RUN_DATE}/fs_input/
 
 mkdir -p $results_dir
 mkdir -p $fs_in_dir
-mkdir -p $fs_out_dir
 
 ### Beagle 4.1
 ### estimate posterior genotype probabilities
